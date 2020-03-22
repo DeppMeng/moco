@@ -117,6 +117,7 @@ def get_loader(args):
     else:
         raise NotImplementedError('augmentation not supported: {}'.format(args.aug))
 
+    logger.info('creating dataset')
     dataset_instance = ImageFolderInstance if args.data_format == 'image' else ImageZipInstance
     train_folder = train_folder + '.zip' if args.data_format == 'zip' else train_folder
     train_dataset = dataset_instance(train_folder, transform=train_transform, two_crop=True)
