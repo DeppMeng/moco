@@ -93,7 +93,7 @@ def parse_option():
 
 def get_loader(args):
     # set the data loader
-    train_folder = os.path.join(args.data_dir, 'train')
+    train_folder = os.path.join(args.data_dir, 'val')
 
     image_size = 224
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
