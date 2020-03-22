@@ -19,7 +19,8 @@ from moco.logger import setup_logger
 from moco.lr_scheduler import get_scheduler
 from moco.models.LinearModel import LinearClassifierResNet
 from moco.models.resnet import resnet50
-from moco.util import AverageMeter, MyHelpFormatter, accuracy, reduce_tensor
+from moco.utils.util import AverageMeter, MyHelpFormatter, accuracy, reduce_tensor
+from moco.utils.zipdataset import ImageZipFolder
 
 try:
     # noinspection PyUnresolvedReferences
@@ -35,6 +36,8 @@ def parse_option():
     parser.add_argument('--data-dir', type=str, required=True, help='root director of dataset')
     parser.add_argument('--dataset', type=str, default='imagenet',
                         choices=['imagenet', 'imagenet100'], help='dataset name')
+    parser.add_argument('--data-format', type=str, default='image', choices=['image', 'zip'],
+                        help='data format for training')
     parser.add_argument('--crop', type=float, default=0.08, help='minimum crop')
     parser.add_argument('--aug', type=str, default='NULL', choices=['NULL', 'CJ'],
                         help='augmentation type: NULL for normal supervised aug, CJ for aug with ColorJitter')
@@ -116,8 +119,15 @@ def get_loader(args):
     ])
 
     # set the data loader
-    train_dataset = datasets.ImageFolder(os.path.join(args.data_dir, 'train'), train_transform)
-    val_dataset = datasets.ImageFolder(os.path.join(args.data_dir, 'val'), val_transform)
+
+    dataset_instance = datasets.ImageFolder if args.data_format == 'image' else ImageZipFolder
+    train_folder = os.path.join(args.data_dir, 'train')
+    val_folder = os.path.join(args.data_dir, 'val')
+    train_folder = train_folder + '.zip' if args.data_format == 'zip' else train_folder
+    val_folder = val_folder + '.zip' if args.data_format == 'zip' else val_folder
+
+    train_dataset = dataset_instance(train_folder, train_transform)
+    val_dataset = dataset_instance(val_folder, val_transform)
     batch_size = args.total_batch_size // dist.get_world_size()
     train_loader = DataLoader(train_dataset,
                               batch_size=batch_size,

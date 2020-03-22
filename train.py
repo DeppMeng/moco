@@ -19,10 +19,10 @@ from torchvision import transforms
 
 
 from moco.NCE import MemoryMoCo, NCESoftmaxLoss
-from moco.dataset import ImageFolderInstance
+from moco.dataset import ImageFolderInstance, ImageZipInstance
 from moco.logger import setup_logger
 from moco.models.resnet import resnet50
-from moco.util import AverageMeter, MyHelpFormatter, DistributedShufle, set_bn_train, moment_update
+from moco.utils.util import AverageMeter, MyHelpFormatter, DistributedShufle, set_bn_train, moment_update
 from moco.lr_scheduler import get_scheduler
 
 try:
@@ -38,7 +38,9 @@ def parse_option():
     # dataset
     parser.add_argument('--data-dir', type=str, required=True, help='root director of dataset')
     parser.add_argument('--dataset', type=str, default='imagenet', choices=['imagenet100', 'imagenet'],
-                        help='dataset to training')
+                        help='dataset for training')
+    parser.add_argument('--data-format', type=str, default='image', choices=['image', 'zip'],
+                        help='data format for training')
     parser.add_argument('--crop', type=float, default=0.08, help='minimum crop')
     parser.add_argument('--aug', type=str, default='CJ', choices=['NULL', 'CJ'],
                         help="augmentation type: NULL for normal supervised aug, CJ for aug with ColorJitter")
@@ -115,7 +117,9 @@ def get_loader(args):
     else:
         raise NotImplementedError('augmentation not supported: {}'.format(args.aug))
 
-    train_dataset = ImageFolderInstance(train_folder, transform=train_transform, two_crop=True)
+    dataset_instance = ImageFolderInstance if args.data_format == 'image' else ImageZipInstance
+    train_folder = train_folder + '.zip' if args.data_format == 'zip' else train_folder
+    train_dataset = dataset_instance(train_folder, transform=train_transform, two_crop=True)
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=False,
