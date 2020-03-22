@@ -8,7 +8,7 @@ python -m torch.distributed.launch --nproc_per_node=4 \
     --dataset imagenet \
     --nce-k 65536 \
     --output-dir ${output_dir} \
-    --data-format zip
+    --data-format image
 
 
 python -m torch.distributed.launch --nproc_per_node=4 \
@@ -17,5 +17,5 @@ python -m torch.distributed.launch --nproc_per_node=4 \
     --data-dir ${data_dir} \
     --pretrained-model ${output_dir}/current.pth \
     --output-dir ${output_dir}/eval \
-    --data-format zip
+    --data-format image
 
