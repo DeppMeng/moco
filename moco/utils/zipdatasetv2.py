@@ -148,7 +148,9 @@ class CachedZipFolder(data.Dataset):
             tuple: (sample, target) where target is class_index of the target class.
         """
         buffer_name, target = self.samples[index]
+        print(buffer_name)
         buffer = self.zip_file.read(buffer_name)
+        print(buffer)
         sample = self.loader(io.BytesIO(buffer))
         if self.transform is not None:
             sample = self.transform(sample)
