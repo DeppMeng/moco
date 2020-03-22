@@ -89,7 +89,7 @@ def make_dataset(zip_file_name, extensions):
             if dir in classes and is_image_file(f):
                 print(dir)
                 print(class_to_idx[dir])
-                print(zip_file.read(f))
+                # print(zip_file.read(f))
                 images.append((zip_file.read(f), class_to_idx[dir]))
 
     return classes, class_to_idx, images
