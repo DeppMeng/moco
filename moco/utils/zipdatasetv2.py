@@ -148,10 +148,10 @@ class CachedZipFolder(data.Dataset):
             tuple: (sample, target) where target is class_index of the target class.
         """
         buffer_name, target = self.samples[index]
-        print(buffer_name)
+        logger.info(buffer_name)
         with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
             buffer = zip_file.read(buffer_name)
-        # print(buffer)
+        logger.info(buffer)
         sample = self.loader(io.BytesIO(buffer))
         if self.transform is not None:
             sample = self.transform(sample)
