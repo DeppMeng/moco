@@ -8,7 +8,9 @@ python -m torch.distributed.launch --nproc_per_node=4 \
     --dataset imagenet \
     --nce-k 65536 \
     --output-dir ${output_dir} \
-    --data-format image
+    --data-format image \
+    --amp-opt-level O2 \
+    --resume /data189/depu/moco/output/imagenet/K65536_default_exp1/ckpt_epoch_10.pth
 
 
 python -m torch.distributed.launch --nproc_per_node=4 \
