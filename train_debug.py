@@ -19,7 +19,7 @@ from torchvision import transforms
 
 
 from moco.NCE import MemoryMoCo, NCESoftmaxLoss
-from moco.dataset import ImageFolderInstance, ImageZipInstance
+from moco.dataset import ImageFolderInstance, ImageZipInstance, ImageZipFolderV2
 from moco.logger import setup_logger
 from moco.models.resnet import resnet50
 from moco.utils.util import AverageMeter, MyHelpFormatter, DistributedShufle, set_bn_train, moment_update
@@ -118,7 +118,7 @@ def get_loader(args):
         raise NotImplementedError('augmentation not supported: {}'.format(args.aug))
 
     logger.info('creating dataset')
-    dataset_instance = ImageFolderInstance if args.data_format == 'image' else ImageZipInstance
+    dataset_instance = ImageFolderInstance if args.data_format == 'image' else ImageZipInstanceV2
     train_folder = train_folder + '.zip' if args.data_format == 'zip' else train_folder
     train_dataset = dataset_instance(train_folder, transform=train_transform, two_crop=True)
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)

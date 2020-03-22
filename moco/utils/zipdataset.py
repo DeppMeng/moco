@@ -84,11 +84,8 @@ def make_dataset(zip_file_name, extensions):
         classes, class_to_idx = find_classes(dirs)
 
         for f in files:
-            print(f)
             dir = f.split('/')[0]
             if dir in classes and is_image_file(f):
-                print(dir)
-                print(class_to_idx[dir])
                 # print(zip_file.read(f))
                 images.append((zip_file.read(f), class_to_idx[dir]))
 

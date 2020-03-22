@@ -79,16 +79,16 @@ def make_dataset(zip_file_name, extensions):
     classes = []
     class_to_idx = {}
 
-    with zipfile.ZipFile(zip_file_name, 'r') as zip_file:
-        dirs, files = get_zip_info(zip_file)
-        classes, class_to_idx = find_classes(dirs)
+    zip_file =  zipfile.ZipFile(zip_file_name, 'r')
+    dirs, files = get_zip_info(zip_file)
+    classes, class_to_idx = find_classes(dirs)
 
-        for f in files:
-            dir = f.split('/')[0]
-            if dir in classes and is_image_file(f):
-                images.append((zip_file.read(f), class_to_idx[dir]))
+    for f in files:
+        dir = f.split('/')[0]
+        if dir in classes and is_image_file(f):
+            images.append((f, class_to_idx[dir]))
 
-    return classes, class_to_idx, images
+    return classes, class_to_idx, images, zip_file
 
 
 class CachedZipFolder(data.Dataset):
@@ -120,7 +120,7 @@ class CachedZipFolder(data.Dataset):
     """
 
     def __init__(self, zip_file_name, loader, extensions, transform=None, target_transform=None):
-        classes, class_to_idx, samples = make_dataset(zip_file_name, extensions)
+        classes, class_to_idx, samples, zip_file = make_dataset(zip_file_name, extensions)
         logger.info('=> {} classes are added'.format(len(classes)))
         logger.info('=> {} samples are added'.format(len(samples)))
 
@@ -132,6 +132,7 @@ class CachedZipFolder(data.Dataset):
 
         self.classes = classes
         self.class_to_idx = class_to_idx
+        self.zip_file = zip_file
         self.samples = samples
         self.targets = [s[1] for s in samples]
 
@@ -146,7 +147,8 @@ class CachedZipFolder(data.Dataset):
         Returns:
             tuple: (sample, target) where target is class_index of the target class.
         """
-        buffer, target = self.samples[index]
+        buffer_name, target = self.samples[index]
+        buffer = self.zip_file.read(buffer_name)
         sample = self.loader(io.BytesIO(buffer))
         if self.transform is not None:
             sample = self.transform(sample)
