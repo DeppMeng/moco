@@ -19,7 +19,7 @@ from torchvision import transforms
 
 
 from moco.NCE import MemoryMoCo, NCESoftmaxLoss
-from moco.dataset import ImageFolderInstance, ImageZipInstance, ImageZipFolderV2
+from moco.dataset import ImageFolderInstance, ImageZipInstance, ImageZipInstanceV2
 from moco.logger import setup_logger
 from moco.models.resnet import resnet50
 from moco.utils.util import AverageMeter, MyHelpFormatter, DistributedShufle, set_bn_train, moment_update
