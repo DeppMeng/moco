@@ -77,7 +77,6 @@ class ImageZipInstanceV2(ImageZipFolderV2):
     def __init__(self, root, transform=None, target_transform=None, two_crop=False):
         super(ImageZipInstanceV2, self).__init__(root, transform, target_transform)
         self.two_crop = two_crop
-
     def __getitem__(self, index):
         """
         Args:
@@ -91,8 +90,8 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         # ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
         
         buffer_name, target = self.samples[index]
-        with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
-            buffer = zip_file.read(buffer_name)
+        # with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
+        buffer = self.zip_file.read(buffer_name)
         image = self.loader(io.BytesIO(buffer))
 
         if self.transform is not None:

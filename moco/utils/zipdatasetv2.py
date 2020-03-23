@@ -139,6 +139,7 @@ class CachedZipFolder(data.Dataset):
 
         self.transform = transform
         self.target_transform = target_transform
+        self.zip_file = zipfile.ZipFile(zip_file_name, 'r')
 
     def __getitem__(self, index):
         """
