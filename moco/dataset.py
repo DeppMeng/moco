@@ -90,8 +90,8 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         # ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
         print(self.zip_file)
         buffer_name, target = self.samples[index]
-        # with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
-        buffer = self.zip_file.read(buffer_name)
+        zip_file = zipfile.ZipFile(self.zip_file_name, 'r')
+        buffer = zip_file.read(buffer_name)
         image = self.loader(io.BytesIO(buffer))
 
         if self.transform is not None:
