@@ -86,6 +86,8 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         # path, target = self.imgs[index]
         # image = self.loader(path)
         image, target = super(ImageZipInstanceV2, self).__getitem__(index)
+        print(image)
+        print(target)
         if self.transform is not None:
             img = self.transform(image)
         else:
