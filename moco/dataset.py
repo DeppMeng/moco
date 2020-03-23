@@ -83,8 +83,9 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         Returns:
             tuple: (image, target, index) where target is class_index of the target class.
         """
-        path, target = self.imgs[index]
-        image = self.loader(path)
+        # path, target = self.imgs[index]
+        # image = self.loader(path)
+        image, target = super(ImageZipInstanceV2, self).__getitem__(index)
         if self.transform is not None:
             img = self.transform(image)
         else:
