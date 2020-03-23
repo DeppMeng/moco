@@ -152,12 +152,13 @@ class CachedZipFolder(data.Dataset):
         with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
             buffer = zip_file.read(buffer_name)
         sample = self.loader(io.BytesIO(buffer))
+        aug_sample = sample
         if self.transform is not None:
-            sample = self.transform(sample)
+            aug_sample = self.transform(sample)
         if self.target_transform is not None:
             target = self.target_transform(target)
 
-        return sample, target
+        return sample, aug_sample, target
 
     def __len__(self):
         return len(self.samples)
