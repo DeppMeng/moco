@@ -152,7 +152,7 @@ class CachedZipFolder(data.Dataset):
         logger.info(buffer_name)
         with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
             buffer = zip_file.read(buffer_name)
-        logger.info(buffer)
+        # logger.info(buffer)
         # time.sleep(1)
         sample = self.loader(io.BytesIO(buffer))
         if self.transform is not None:
