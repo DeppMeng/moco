@@ -74,6 +74,8 @@ class ImageZipInstanceV2(ImageZipFolderV2):
 
     def __init__(self, root, transform=None, target_transform=None, two_crop=False):
         super(ImageZipInstanceV2, self).__init__(root)
+        self.transform = transform
+        self.target_transform = target_transform
         self.two_crop = two_crop
 
     def __getitem__(self, index):
