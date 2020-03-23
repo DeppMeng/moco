@@ -86,6 +86,7 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         # path, target = self.imgs[index]
         # image = self.loader(path)
         ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
+        # print(ori_image, image, target)
         # if self.transform is not None:
         #     img = self.transform(image)
         # else:
@@ -96,5 +97,5 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         if self.two_crop:
             img2 = self.transform(ori_image)
             img = torch.cat([image, img2], dim=0)
-
+        print(img, target)
         return img, target
