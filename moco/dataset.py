@@ -88,7 +88,7 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         # image = self.loader(path)
 
         # ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
-        print(self.zip_file)
+        # print(self.zip_file)
         buffer_name, target = self.samples[index]
         zip_file = zipfile.ZipFile(self.zip_file_name, 'r')
         buffer = zip_file.read(buffer_name)
