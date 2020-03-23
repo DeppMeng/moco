@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import zipfile
+import io
 import torch
 import torchvision.datasets as datasets
 from moco.utils.zipdataset import ImageZipFolder
@@ -85,17 +87,23 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         """
         # path, target = self.imgs[index]
         # image = self.loader(path)
-        ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
-        # print(ori_image, image, target)
-        # if self.transform is not None:
-        #     img = self.transform(image)
-        # else:
-        #     img = image
-        # if self.target_transform is not None:
-        #     target = self.target_transform(target)
+
+        # ori_image, image, target = super(ImageZipInstanceV2, self).__getitem__(index)
+        
+        buffer_name, target = self.samples[index]
+        with zipfile.ZipFile(self.zip_file_name, 'r') as zip_file:
+            buffer = zip_file.read(buffer_name)
+        image = self.loader(io.BytesIO(buffer))
+
+        if self.transform is not None:
+            img = self.transform(image)
+        else:
+            img = image
+        if self.target_transform is not None:
+            target = self.target_transform(target)
 
         if self.two_crop:
-            img2 = self.transform(ori_image)
-            img = torch.cat([image, img2], dim=0)
-        # print(img, target)
+            img2 = self.transform(image)
+            img = torch.cat([img, img2], dim=0)
+
         return img, target
