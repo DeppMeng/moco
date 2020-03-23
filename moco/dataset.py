@@ -97,5 +97,5 @@ class ImageZipInstanceV2(ImageZipFolderV2):
         if self.two_crop:
             img2 = self.transform(ori_image)
             img = torch.cat([image, img2], dim=0)
-        print(img, target)
+        # print(img, target)
         return img, target
