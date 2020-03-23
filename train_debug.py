@@ -205,7 +205,7 @@ def main(args):
     # optionally resume from a checkpoint
     if args.resume:
         assert os.path.isfile(args.resume)
-        load_checkpoint(args, model, model_ema, contrast, optimizer, scheduler)
+        load_checkpoint(args, model, model_ema, contrast, scheduler, optimizer)
 
     # tensorboard
     if dist.get_rank() == 0:

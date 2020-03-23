@@ -230,7 +230,7 @@ def main(args):
 
         if dist.get_rank() == 0:
             # save model
-            save_checkpoint(args, epoch, model, model_ema, contrast, scheduler, optimizer)
+            save_checkpoint(args, epoch, model, model_ema, contrast, optimizer, scheduler)
 
 
 def train_moco(epoch, train_loader, model, model_ema, contrast, criterion, optimizer, scheduler, args):
